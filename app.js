@@ -1,10 +1,50 @@
-var Q = require('q');
+var Q        = require('q');
+var fs       = require('fs');
+var readFile = Q.denodeify(fs.readFile);
+
+var bar = foo();
+
+readFile("foo.txt", "utf-8")
+.then(function(txt) {
+    console.log('***>', txt);
+})
+.fail(function(err) {
+    console.log('ERR?:', err);
+})
+.done();
+
+baz()
+.then(function(result) {
+    console.log('===>', result);
+})
+.fail(function(err) {
+    console.log('ERR?:', err);
+})
+.done();
+
+lulz()
+.get(0)
+//.get('foo')
+.then(function(arr) {
+    console.log('--->', arr);
+})
+.done();
+
+function baz() {
+    return Q.nfcall(fs.readFile, "foo.txt", "utf-8");
+}
+
+function lulz() {
+    return Q.fcall(function() {
+        return [{ foo: "bar" }, { foo: "baz"} ];
+    });
+}
 
 function foo() {
     return waitForPromiseA()
     .then(function(x) {
         console.log('--> inner then 1', x);
-        return waitForPromiseB();
+        return waitForPromiseA();
     })
     .then(function(x) {
         console.log('--> inner then 2', x);
@@ -20,7 +60,7 @@ function foo() {
     });
 }
 
-function waitForPromiseA() {
+function waitForPromiseA(x) {
     var defer = Q.defer();
     var time = Math.floor(Math.random() * 1000);
     console.log('A time:', time);
@@ -43,8 +83,6 @@ function waitForPromiseB() {
     }, time);
     return defer.promise;
 }
-
-var bar = foo();
 
 var chain1 = bar
 .then(function(x) {
