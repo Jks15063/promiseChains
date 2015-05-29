@@ -92,10 +92,6 @@ var chain1 = bar
 .then(function(x) {
     console.log('branch 1, outer then 2', x);
     return waitForPromiseA();
-})
-.fail(function(err) {
-    console.log('branch 1 Err:', err);
-    return Q.reject(err);
 });
 
 var chain2 = bar
@@ -106,10 +102,6 @@ var chain2 = bar
 .then(function(x) {
     console.log('branch 2, outer then 2', x);
     return waitForPromiseB();
-})
-.fail(function(err) {
-    console.log('branch 2 Err:', err);
-    return Q.reject(err);
 });
 
 Q.all([chain1, chain2])
