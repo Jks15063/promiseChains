@@ -22,13 +22,15 @@ baz()
 })
 .done();
 
-lulz()
+var newLulz = lulz()
 .get(0)
 //.get('foo')
 .then(function(arr) {
-    console.log('--->', arr);
-})
-.done();
+    console.log('!--->', arr);
+    return arr;
+});
+//.done();
+console.log('--->', newLulz);
 
 function baz() {
     return Q.nfcall(fs.readFile, "foo.txt", "utf-8");
@@ -108,7 +110,7 @@ Q.all([chain1, chain2])
 .then(function(arr) {
     console.log('All Done', arr);
 })
-.fail(function(err) {
+.catch(function(err) {
     console.log('final err:', err);
 })
 .done();
